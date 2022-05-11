@@ -118,7 +118,7 @@ void drop() {
   score+= lines_to_remove_coint * 2;
   current_figure_initialized = 0;
 
-  level = lines / 4;
+  level = lines / 4 + 1;
   speed = 30 - level;
 }
 
