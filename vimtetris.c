@@ -114,6 +114,7 @@ void drop() {
     if (r)
       lines_to_remove[lines_to_remove_coint++] = y;
   }
+
   lines+= lines_to_remove_coint;
   score+= lines_to_remove_coint * 2;
   current_figure_initialized = 0;
@@ -125,6 +126,7 @@ void drop() {
 void rotate() {
   int rotated[16];
   int minx = 3, miny = 3;
+
   // Rotate
   for (int y = 0; y < 4; y++) {
     for (int x = 0; x < 4; x++) {
@@ -136,6 +138,7 @@ void rotate() {
       }
     }
   }
+
   // Shift left/up
   for (int y = miny; y < 4; y++) {
     for (int x = minx; x < 4; x++) {
@@ -144,6 +147,7 @@ void rotate() {
       rotated[x - minx + (y - miny) * 4] = t;
     }
   }
+
   // Can place?
   for (int y = 0; y < 4; y++) {
     for (int x = 0; x < 4; x++) {
@@ -245,7 +249,7 @@ void clear() {
     printf("\e[A");
 }
 
-void intHandler(int dummy) {
+void int_handler(int dummy) {
   stop_running = 1;
 }
 
@@ -267,7 +271,7 @@ int main(int argc, char **argv) {
 
   srand(time(NULL));
 
-  // set the terminal to raw mode
+  // Set the terminal to raw mode
   struct termios orig_term_attr, new_term_attr;
   tcgetattr(fileno(stdin), &orig_term_attr);
   memcpy(&new_term_attr, &orig_term_attr, sizeof(struct termios));
@@ -276,7 +280,7 @@ int main(int argc, char **argv) {
   new_term_attr.c_cc[VMIN] = 1;
   tcsetattr(fileno(stdin), TCSANOW, &new_term_attr);
 
-  signal(SIGINT, intHandler);
+  signal(SIGINT, int_handler);
 
   memset(field, 0, sizeof(int) * COLS * ROWS);
   get_next_figure();
@@ -284,8 +288,10 @@ int main(int argc, char **argv) {
 
   // Hide cursor
   printf("\e[?25l");
+
   while (stop_running == 0 && game_over == 0) {
     render();
+
     // 60fps wait
     usleep(1000000 / 60);
 
